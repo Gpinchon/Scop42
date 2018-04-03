@@ -1,0 +1,26 @@
+# Object files
+*.o
+*.ko
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.so
+*.so.*
+*.dylib
+
+# Debug files
+*.dSYM/
+*.su
+
+# Mac OS trash
+.DS_Store
