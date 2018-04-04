@@ -9,7 +9,7 @@
 
 # What is this ?
 This is a precompiled version with everything it needs to run the executable.
-It was compiled for Windows 10 X86-64
+It was compiled for MacOS 10
 
 ***If you're a student looking for guidance, jump to Credits section ;-)***
 
@@ -20,7 +20,8 @@ It was compiled for Windows 10 X86-64
 ![Cyber Warrior](/screenshots/screen3.PNG "Cyber Warrior")
 
 # How to use ?
-Simply drop a *.obj* file directly onto *Scop.exe*, or run *Scop.exe* through shell with the model's path as first argument as such :
+First you need glew and SDL2 installed
+Simply run *Scop* through shell with the model's path as first argument as such :
 ```
 ./Scop ./some/model/path.obj
 ```
