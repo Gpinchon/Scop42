@@ -9,7 +9,7 @@
 
 # What is this ?
 This is a precompiled version with everything it needs to run the executable.
-It was compiled for Windows 10 X86-64
+It was compiled for MacOS 10
 
 ***If you're a student looking for guidance, jump to Credits section ;-)***
 
@@ -20,7 +20,8 @@ It was compiled for Windows 10 X86-64
 ![Cyber Warrior](/screenshots/screen3.PNG "Cyber Warrior")
 
 # How to use ?
-Simply drop a *.obj* file directly onto *Scop.exe*, or run *Scop.exe* through shell with the model's path as first argument as such :
+First you need glew and SDL2 installed
+Simply run *Scop* through shell with the model's path as first argument as such :
 ```
 ./Scop ./some/model/path.obj
 ```
@@ -39,7 +40,7 @@ Simply drop a *.obj* file directly onto *Scop.exe*, or run *Scop.exe* through sh
 - This program features real time Physically based rendering for *.obj* models.
 - It features image based lighting using irradiance maps and a custom BRDF Lookup Table (replaceable).
 - It's inspired by Unreal Engine 4 workflow and allows for metallic, roughness and specular (F0).
-- The Specular channel on the material allows for more various materials, such as lacked plastics for instance.
+- The Specular channel on the material allows for more various materials, such as lackered plastics for instance.
 - You can specify an heigth texture to enable steep parallax mapping.
 - Here, Specular channels are slightly different from Blinn-Phong's specular channel, it influences the material's reflectivity and behavior regarding light as it is used as a precomputed F0 value. A plastic material with a Specular of *vec3(1, 1, 1)* will have a behavior close to metallic materials, but will have a diffuse channel, unlike metallic material. In order to have "normal" plastic, it is recommended to either leave *Ni* and *Ks* empty, use *Ni 1.5* or *Ks 0.04 0.04 0.04*
 - Extra values have been added to mtl files, allowing for physically based materials :
