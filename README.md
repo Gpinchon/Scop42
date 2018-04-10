@@ -35,6 +35,7 @@ Simply run *Scop* through shell with the model's path as first argument as such 
 - [Space] Cycle through environments
 - [LAlt + Enter] Switch fullscreen
 - [S] Switch stupidity on/off
+- [Q] Cycle through quality levels
 
 # Features
 - This program features real time Physically based rendering for *.obj* models.
