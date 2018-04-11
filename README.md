@@ -34,6 +34,7 @@ Simply drop a *.obj* file directly onto *Scop.exe*, or run *Scop.exe* through sh
 - [Space] Cycle through environments
 - [LAlt + Enter] Switch fullscreen
 - [S] Switch stupidity on/off
+- [Q] Cycle through quality levels
 
 # Features
 - This program features real time Physically based rendering for *.obj* models.
