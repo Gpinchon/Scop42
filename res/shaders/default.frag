@@ -41,8 +41,6 @@ uniform vec3		in_LightDirection = normalize(vec3(-1, 1, 0));
 in vec3			frag_ShadowPosition;
 in vec3			frag_WorldPosition;
 in lowp vec3	frag_WorldNormal;
-in lowp vec3	frag_ModelNormal;
-in lowp vec3	frag_ModelPosition;
 in lowp vec2	frag_Texcoord;
 in lowp vec3	frag_Light_Color;
 
@@ -77,10 +75,10 @@ lowp vec3	Fresnel(in lowp float factor, in lowp vec3 F0, in lowp float roughness
 	return ((max(vec3(1 - roughness), F0)) * pow(max(0, 1 - factor), 5) + F0);
 }
 
-vec2	Parallax_Mapping(in vec3 tbnV, in vec2 T, out lowp float parallaxHeight)
+void	Parallax_Mapping(in vec3 tbnV, inout vec2 T, out lowp float parallaxHeight)
 {
-	const lowp float minLayers = 64;
-	const lowp float maxLayers = 128;
+	const lowp float minLayers = 10;
+	const lowp float maxLayers = 15;
 	lowp float numLayers = mix(maxLayers, minLayers, abs(tbnV.z));
 	int	tries = int(numLayers);
 	lowp float layerHeight = 1.0 / numLayers;
@@ -104,7 +102,7 @@ vec2	Parallax_Mapping(in vec3 tbnV, in vec2 T, out lowp float parallaxHeight)
 	parallaxHeight = (curLayerHeight + prevH * weight + nextH * (1.0 - weight));
 	parallaxHeight *= in_Parallax;
 	parallaxHeight = isnan(parallaxHeight) ? 0 : parallaxHeight;
-	return finalTexCoords;
+	T = finalTexCoords;
 }
 
 mat3x3	tbn_matrix(in vec3 position, in vec3 normal, in vec2 texcoord)
@@ -145,7 +143,7 @@ void	main()
 	if (in_Use_Texture_Height)
 	{
 		lowp float ph;
-		vt = Parallax_Mapping(tbn * normalize(in_CamPos - worldPosition), vt, ph);
+		Parallax_Mapping(tbn * normalize(in_CamPos - worldPosition), vt, ph);
 		worldPosition = worldPosition - (worldNormal * ph);
 	}
 	lowp vec4	albedo_sample = texture(in_Texture_Albedo, vt);
