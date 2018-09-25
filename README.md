@@ -9,7 +9,7 @@
 
 # What is this ?
 This is a precompiled version with everything it needs to run the executable.
-It was compiled for Windows 10 X86-64
+It was compiled for Windows 10 X86-64, fully written in C++.
 
 ***If you're a student looking for guidance, jump to Credits section ;-)***
 
@@ -26,15 +26,15 @@ Simply drop a *.obj* file directly onto *Scop.exe*, or run *Scop.exe* through sh
 ```
 
 # Key Binding
-- [⇦ ⇨ ⇧ ⇩] Orbit camera around model
-- [Keypad -/+] Zoom out/in
+- [⇦ ⇨ ⇧ ⇩]/[Mouse + Left-Click]/[Gamepad Left Stick] Orbit camera around model
+- [Keypad -/+]/[Gamepad Right Stick] Zoom out/in
 - [LCtrl + [Keypad +/-]] Scale up/down model
-- [Page Up/Down] Move camera up/down
+- [Page Up/Down]/[Gamepad Right/Left Trigger] Move camera up/down
 - [Left Shift] Speed up movements/scaling
-- [Space] Cycle through environments
+- [Space]/[Gamepad Y] Cycle through environments
 - [LAlt + Enter] Switch fullscreen
-- [S] Switch stupidity on/off
-- [Q] Cycle through quality levels
+- [Q]/[Gamepad A] Cycle through quality levels
+- [R]/[Gamepad B] Stop Object Rotation
 
 # Features
 - This program features real time Physically based rendering for *.obj* models.
