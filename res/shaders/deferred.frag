@@ -1,4 +1,5 @@
 #define M_PI 3.1415926535897932384626433832795
+#define EPSILON 0.0001
 
 precision lowp float;
 precision lowp int;
@@ -66,7 +67,7 @@ struct t_Camera {
 #ifdef LIGHTSHADER
 struct t_Out {
 	vec4		Color;
-	vec4		Emitting;
+	vec3		Emitting;
 };
 #endif //LIGHTSHADER
 
@@ -80,16 +81,16 @@ in vec3				frag_Cube_UV;
 
 #ifdef POSTSHADER
 layout(location = 0) out vec4	out_Albedo;
-layout(location = 1) out vec4	out_Emitting;
-layout(location = 2) out vec4	out_Fresnel;
-layout(location = 3) out vec4	out_Material_Values; //Roughness, Metallic, Ior
-layout(location = 4) out vec4	out_AO;
-layout(location = 5) out vec4	out_Normal;
+layout(location = 1) out vec3	out_Emitting;
+layout(location = 2) out vec3	out_Fresnel;
+layout(location = 3) out vec3	out_Material_Values; //Roughness, Metallic, Ior
+layout(location = 4) out float	out_AO;
+layout(location = 5) out vec3	out_Normal;
 #endif //POSTSHADER
 
 #ifdef LIGHTSHADER
 layout(location = 0) out vec4	out_Color;
-layout(location = 1) out vec4	out_Emitting;
+layout(location = 1) out vec3	out_Emitting;
 #endif //LIGHTSHADER
 
 t_Frag	Frag;
@@ -103,6 +104,13 @@ vec3	Position(vec2 UV)
 	float	linearDepth = texture(Texture.Depth, UV).r * 2.0 - 1.0;
 	vec2	coord = UV * 2.0 - 1.0;
 	vec4	projectedCoord = vec4(coord, linearDepth, 1.0);
+	projectedCoord = Camera.InvMatrix.View * Camera.InvMatrix.Projection * projectedCoord;
+	return (projectedCoord.xyz / projectedCoord.w);
+}
+
+vec3	Position(in vec2 UV, in float depth)
+{
+	vec4	projectedCoord = vec4(UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
 	projectedCoord = Camera.InvMatrix.View * Camera.InvMatrix.Projection * projectedCoord;
 	return (projectedCoord.xyz / projectedCoord.w);
 }
@@ -137,7 +145,7 @@ void	FillFrag()
 	Frag.Material.AO = texture(Texture.AO, frag_UV).r;
 #ifdef LIGHTSHADER
 	Out.Color = texture(Texture.Back.Color, frag_UV);
-	Out.Emitting = texture(Texture.Back.Emitting, frag_UV);
+	Out.Emitting = texture(Texture.Back.Emitting, frag_UV).rgb;
 #endif
 }
 
@@ -152,11 +160,11 @@ void	FillOut()
 		gl_FragDepth = NDC.z / NDC.w * 0.5 + 0.5;
 	}
 	out_Albedo = vec4(Frag.Material.Albedo, Frag.Material.Alpha);
-	out_Fresnel = vec4(Frag.Material.Specular, 1);
-	out_Emitting = vec4(Frag.Material.Emitting, 1);
-	out_Material_Values = vec4(Frag.Material.Roughness, Frag.Material.Metallic, Frag.Material.Ior, 1);
-	out_AO = vec4(Frag.Material.AO, 0, 0, 1);
-	out_Normal = vec4(Frag.Normal, 1);
+	out_Fresnel = Frag.Material.Specular;
+	out_Emitting = Frag.Material.Emitting;
+	out_Material_Values = vec3(Frag.Material.Roughness, Frag.Material.Metallic, Frag.Material.Ior);
+	out_AO = Frag.Material.AO;
+	out_Normal = Frag.Normal;
 }
 #endif
 
@@ -187,6 +195,28 @@ vec4	sampleLod(in sampler2D texture, in vec2 uv, in float value)
 float	map(in float value, in float low1, in float high1, in float low2, in float high2)
 {
 	return (low2 + (value - low1) * (high2 - low2) / (high1 - low1));
+}
+
+float	smootherstep(float edge0, float edge1, float x) {
+	x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+	return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
+bool	isZero(in float v)
+{
+	return (abs(v) < EPSILON);
+}
+
+bool	isZero(in vec2 v)
+{
+	bvec2	eq = equal(v, vec2(0));
+	return (eq.x && eq.y);
+}
+
+bool	lequal(in vec2 v, in vec2 v1)
+{
+	bvec2	eq = lessThanEqual(v, v1);
+	return (eq.x && eq.y);
 }
 
 void	ApplyTechnique();
